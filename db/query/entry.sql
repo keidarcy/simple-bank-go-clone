@@ -14,7 +14,7 @@ WHERE
 LIMIT
 	1;
 
--- name: ListEntry :many
+-- name: ListEntries :many
 SELECT
 	*
 FROM

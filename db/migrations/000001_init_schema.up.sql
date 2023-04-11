@@ -1,8 +1,8 @@
 CREATE TABLE "accounts" (
   "id" bigserial PRIMARY KEY,
-  "owner" varchar NOT NULL,
+  "owner" VARCHAR NOT NULL,
   "balance" bigint NOT NULL,
-  "currency" varchar NOT NULL,
+  "currency" VARCHAR NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
@@ -35,8 +35,17 @@ COMMENT ON COLUMN "entries"."amount" IS 'can be negative or postive';
 
 COMMENT ON COLUMN "transfers"."amount" IS 'can be negative or postive';
 
-ALTER TABLE "entries" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
+ALTER TABLE
+  "entries"
+ADD
+  FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
 
-ALTER TABLE "transfers" ADD FOREIGN KEY ("from_account_id") REFERENCES "accounts" ("id");
+ALTER TABLE
+  "transfers"
+ADD
+  FOREIGN KEY ("from_account_id") REFERENCES "accounts" ("id");
 
-ALTER TABLE "transfers" ADD FOREIGN KEY ("to_account_id") REFERENCES "accounts" ("id");
+ALTER TABLE
+  "transfers"
+ADD
+  FOREIGN KEY ("to_account_id") REFERENCES "accounts" ("id");

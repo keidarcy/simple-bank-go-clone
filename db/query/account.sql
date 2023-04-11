@@ -14,7 +14,7 @@ WHERE
 LIMIT
 	1;
 
--- name: ListAccount :many
+-- name: ListAccounts :many
 SELECT
 	*
 FROM
@@ -24,7 +24,7 @@ ORDER BY
 LIMIT
 	$1 OFFSET $2;
 
--- name: UpdateAuthor :one
+-- name: UpdateAccount :one
 UPDATE
 	accounts
 SET
@@ -32,7 +32,7 @@ SET
 WHERE
 	id = $1 RETURNING *;
 
--- name: DeleteAuthor :exec
+-- name: DeleteAccount :exec
 DELETE FROM
 	accounts
 WHERE
