@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"github.com/keidarcy/simple-bank/api"
@@ -13,7 +12,6 @@ import (
 
 func main() {
 	config, err := util.LoadConfig(".")
-	fmt.Printf("%v", config)
 
 	if err != nil {
 		log.Fatal("cannot load config:", err)
@@ -26,7 +24,12 @@ func main() {
 	}
 
 	store := db.NewStore(conn)
-	server := api.NewServer(store)
+	server, err := api.NewServer(config, store)
+
+	if err != nil {
+		log.Fatal("cannot create server", err)
+	}
+
 	err = server.Start(config.ServerAddress)
 
 	if err != nil {
