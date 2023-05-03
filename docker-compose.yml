@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=simple_bank
+  
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_SOURCE=postgresql://root:password@postgres:5432/simple_bank?sslmode=disable
+    depends_on:
+      - postgres
+    # > Setting entrypoint both overrides any default entrypoint set on the service’s image with the ENTRYPOINT Dockerfile instruction, and clears out any default command on the image - meaning that if there’s a CMD instruction in the Dockerfile, it is ignored.
+    # https://docs.docker.com/compose/compose-file/compose-file-v3/#entrypoint 
+    entrypoint: ["/app/wait-for", "postgres:5432", "--", "/app/start.sh"]
+    command: ["/app/main"]
