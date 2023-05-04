@@ -9,14 +9,14 @@ permissions:
 
 jobs:
   build:
-    name: Test
+    name: Push to ECR
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2 # More information on this action can be found below in the 'AWS Credentials' section
         with:
           role-to-assume: arn:aws:iam::558931385457:role/GithubSimpleBankAction
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: $AWS_REGION
       - name: Copy main.go to s3
         run: |
           aws s3 cp ./main.go s3://${{ env.BUCKET_NAME }}/
