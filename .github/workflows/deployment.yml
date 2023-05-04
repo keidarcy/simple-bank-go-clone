@@ -16,7 +16,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2 # More information on this action can be found below in the 'AWS Credentials' section
         with:
           role-to-assume: arn:aws:iam::558931385457:role/GithubSimpleBankAction
-          aws-region: $AWS_REGION
+          aws-region: ${{ env.AWS_REGION }}
       - name: Copy main.go to s3
         run: |
           aws s3 cp ./main.go s3://${{ env.BUCKET_NAME }}/
