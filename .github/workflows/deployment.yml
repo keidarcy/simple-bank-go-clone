@@ -1,0 +1,37 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: ['master']
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2 # More information on this action can be found below in the 'AWS Credentials' section
+        with:
+          role-to-assume: arn:aws:iam::558931385457:role/GithubSimpleBankAction
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Copy main.go to s3
+        run: |
+          aws s3 cp ./main.go s3://${{ env.BUCKET_NAME }}/
+      # - name: Login to Amazon ECR Public
+      #   id: login-ecr-public
+      #   uses: aws-actions/amazon-ecr-login@v1
+      #   with:
+      #     registry-type: public
+
+      # - name: Build, tag, and push docker image to Amazon ECR Public
+      #   env:
+      #     REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+      #     REGISTRY_ALIAS: my-ecr-public-registry-alias
+      #     REPOSITORY: my-ecr-public-repo
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
+      #     docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
