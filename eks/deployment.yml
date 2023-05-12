@@ -17,5 +17,6 @@ spec:
       containers:
         - name: simple-bank-api
           image: { { ECR_REPO_URL_WITH_TAG } }
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
