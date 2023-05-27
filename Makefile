@@ -42,7 +42,16 @@ dbdocs:
 db_schema:
 	dbml2sql --postgres -o doc/schema.sql doc/db.dbml
 
-.PHONY: postgres createdb dropdb migrateup migratedown migrateup1 migratedown1 sqlc mock dbdocs dbschema
+proto:
+	rm -rf pb/*.go
+	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+    --go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+    proto/*.proto
+
+evans:
+	evans --host localhost --port 9090 -r repl
+
+.PHONY: postgres createdb dropdb migrateup migratedown migrateup1 migratedown1 sqlc mock dbdocs dbschema proto evans
 
 # create migration
 # migrate create -ext sql -dir db/migration -seq init_schema
