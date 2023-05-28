@@ -52,7 +52,10 @@ proto:
 evans:
 	evans --host localhost --port 9090 -r repl
 
-.PHONY: postgres createdb dropdb migrateup migratedown migrateup1 migratedown1 sqlc mock dbdocs dbschema proto evans
+tui:
+	go run tui/main.go "user='postgres' password='password' sslmode=disable"
+
+.PHONY: postgres createdb dropdb migrateup migratedown migrateup1 migratedown1 sqlc mock dbdocs dbschema proto evans tui
 
 # create migration
 # migrate create -ext sql -dir db/migration -seq init_schema
