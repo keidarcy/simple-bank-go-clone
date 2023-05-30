@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/keidarcy/simple-bank/api"
 	db "github.com/keidarcy/simple-bank/db/sqlc"
 	"github.com/keidarcy/simple-bank/gapi"
 	"github.com/keidarcy/simple-bank/pb"
@@ -83,6 +82,9 @@ func runGatewayServer(config util.Config, store db.Store) {
 	mux := http.NewServeMux()
 	mux.Handle("/", grpcMux)
 
+	fs := http.FileServer(http.Dir("./doc/swagger/"))
+	mux.Handle("/swagger/", http.StripPrefix("/swagger", fs))
+
 	listener, err := net.Listen("tcp", config.HTTPServerAddress)
 
 	if err != nil {
@@ -96,16 +98,16 @@ func runGatewayServer(config util.Config, store db.Store) {
 
 }
 
-func runGinServer(config util.Config, store db.Store) {
-	server, err := api.NewServer(config, store)
+// func runGinServer(config util.Config, store db.Store) {
+// 	server, err := api.NewServer(config, store)
 
-	if err != nil {
-		log.Fatal("cannot create server", err)
-	}
+// 	if err != nil {
+// 		log.Fatal("cannot create server", err)
+// 	}
 
-	err = server.Start(config.HTTPServerAddress)
+// 	err = server.Start(config.HTTPServerAddress)
 
-	if err != nil {
-		log.Fatal("cannot start server:", err)
-	}
-}
+// 	if err != nil {
+// 		log.Fatal("cannot start server:", err)
+// 	}
+// }
